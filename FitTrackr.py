@@ -1,22 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 @app.route('/')
-def home():
-    return render_template('home.html')
+def hello_world():
+    return 'Hello,world'
 
-@app.route('/settings')
-def settings():
-    return render_template('settings.html')
-
-@app.route('/settings/quit', methods=['POST'])
-def quit_settings():
-    return redirect(url_for('home'))
-
-@app.route('/settings/back', methods=['POST'])
-def back_settings():
-    return redirect(url_for('home'))
-
-if _name_ == '_main_':
+if __name__ == '__main__':
     app.run(debug=True)
+
