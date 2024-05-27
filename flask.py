@@ -1,24 +1,24 @@
 from flask import Flask, render_template, request, jsonify
 
-app = Flask(_name_)
+app = Flask(_FitTrackr_)
 
 @app.route('/')
 def home():
     return render_template('home.html')
 
-@app.route('/settings', methods=['POST'])
+@app.route('/settings', methods=['GET'])
 def settings():
     return render_template('settings.html')
 
-@app.route('/quit', methods=['POST'])
+@app.route('/quit', methods=['GET'])
 def quit():
     return "Quitting the application..."
 
-@app.route('/back', methods=['POST'])
+@app.route('/back', methods=['GET'])
 def back():
     return render_template('home.html')
 
-@app.route('/workouts', methods=['POST'])
+@app.route('/workouts', methods=['GET'])
 def workouts():
     return render_template('workouts.html')
 
