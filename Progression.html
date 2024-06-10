@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .taskbar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100px;
+            height: 100%;
+            background-color: #f2f2f2;
+            border-right: 1px solid #ccc;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .taskbar-button {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            text-align: center;
+        }
+
+        .taskbar-button:hover {
+            background-color: #ccc;
+        }
+
+        .bmi-calculator {
+            display: none;
+            position: absolute;
+            top: 450px; /* Adjusted to be below the calendar */
+            left: 150px;
+            background-color: #347ca0;
+            padding: 20px;
+            border: 1px solid #131313;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        #bmi-button {
+            display: none;
+            position: absolute;
+            top: 500px; /* Adjusted to be below the calendar */
+            left: 150px;
+            padding: 20px 40px; /* increased padding to make the button bigger */
+            font-size: 18px; /* increased font size to make the button bigger */
+            background-color: #421c83;
+            color: rgb(224, 241, 248);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #bmi-button:hover {
+            background-color: #421c83;
+        }
+
+        .calendar-container {
+            display: none;
+            position: absolute;
+            top: 50px;
+            left: 150px;
+            background-color: #6b6bc2;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #6b6bc2;
+            color: #fff;
+        }
+
+        header button {
+            background-color: #fff;
+            border: none;
+            color: #875261;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        header button:hover {
+            background-color: #ddd;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        td.active {
+            background-color: #7a336c;
+            color: #e7e1e6;
+        }
+
+        td:hover {
+            background-color: #f1f1f1;
+        }
+
+        td.empty {
+            cursor: default;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="taskbar" id="taskbar">
+        <div class="taskbar-button" id="settings-button">Settings</div>
+        <div class="taskbar-button" id="profile-button">Profile</div>
+        <div class="taskbar-button" id="about-button">About</div>
+        <div class="taskbar-button" id="progress-button">Progress</div>
+        <div class="taskbar-button" id="workouts-button">My Workouts</div>
+        <div class="taskbar-button" id="personalization-button">Personalization</div>
+    </div>
+    <div class="calendar-container" id="calendar-container">
+        <header>
+            <button id="prev-month">Prev</button>
+            <h2 id="current-month-year"></h2>
+            <button id="next-month">Next</button>
+        </header>
+        <table id="calendar">
+            <thead>
+                <tr>
+                    <th>Sun</th>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                    <th>Sat</th>
+                </tr>
+            </thead>
+            <tbody id="calendar-body">
+                <!-- Calendar dates will be injected here -->
+            </tbody>
+        </table>
+    </div>
+    <button id="bmi-button">BMI Calculator</button>
+    <div class="bmi-calculator" id="bmi-calculator">
+        <button id="back-button">Back</button>
+        <h2>BMI Calculator</h2>
+        <label for="height">Height (cm):</label>
+        <input type="number" id="height" placeholder="Height in cm"><br>
+        <label for="weight">Weight (kg):</label>
+        <input type="number" id="weight" placeholder="Weight in kg"><br>
+        <button id="calculate-button">Calculate BMI</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('progress-button').addEventListener('click', function() {
+            document.getElementById('calendar-container').style.display = 'block';
+            document.getElementById('bmi-button').style.display = 'block';
+        });
+
+        document.getElementById('bmi-button').addEventListener('click', function() {
+            document.getElementById('bmi-button').style.display = 'none';
+            document.getElementById('bmi-calculator').style.display = 'block';
+        });
+
+        document.getElementById('back-button').addEventListener('click', function() {
+            document.getElementById('bmi-calculator').style.display = 'none';
+            document.getElementById('bmi-button').style.display = 'block';
+        });
+
+        document.getElementById('calculate-button').addEventListener('click', function() {
+            var height = parseFloat(document.getElementById('height').value);
+            var weight = parseFloat(document.getElementById('weight').value);
+            var bmi = weight / Math.pow(height / 100, 2);
+            document.getElementById('result').innerHTML = 'Your BMI is: ' + bmi.toFixed(2);
+        });
+
+        const calendarBody = document.getElementById('calendar-body');
+        const currentMonthYear = document.getElementById('current-month-year');
+        let currentDate = new Date();
+        let selectedDates = JSON.parse(localStorage.getItem('selectedDates')) || {};
+
+        function renderCalendar(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth();
+
+            currentMonthYear.innerText = `${date.toLocaleString('default', { month: 'long' })} ${year}`;
+
+            calendarBody.innerHTML = '';
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            let dateNum = 1;
+
+            for (let i = 0; i < 6; i++) {
+                const row = document.createElement('tr');
+
+                for (let j = 0; j < 7; j++) {
+                    const cell = document.createElement('td');
+
+                    if (i === 0 && j < firstDay) {
+                        cell.classList.add('empty');
+                    } else if (dateNum > daysInMonth) {
+                        cell.classList.add('empty');
+                    } else {
+                        cell.innerText = dateNum;
+
+                        const dateString = `${year}-${month + 1}-${dateNum}`;
+                        if (selectedDates[dateString]) {
+                            cell.classList.add('active');
+                        }
+
+                        cell.addEventListener('click', () => {
+                            cell.classList.toggle('active');
+                            if (selectedDates[dateString]) {
+                                delete selectedDates[dateString];
+                            } else {
+                                selectedDates[dateString] = true;
+                            }
+                            localStorage.setItem('selectedDates', JSON.stringify(selectedDates));
+                        });
+
+                        dateNum++;
+                    }
+                    row.appendChild(cell);
+                }
+                calendarBody.appendChild(row);
+            }
+        }
+
+        document.getElementById('prev-month').addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar(currentDate);
+        });
+
+        document.getElementById('next-month').addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar(currentDate);
+        });
+
+        renderCalendar(currentDate);
+    </script>
+</body>
+</html>
