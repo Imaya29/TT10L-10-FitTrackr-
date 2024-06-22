@@ -1,257 +1,34 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
-    <style>
-        .taskbar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 100px;
-            height: 100%;
-            background-color: #f2f2f2;
-            border-right: 1px solid #ccc;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        .taskbar-button {
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-            text-align: center;
-            cursor: pointer;
-        }
-        .taskbar-button:hover {
-            background-color: #ccc;
-        }
-        .workout-page {
-            position: absolute;
-            top: 0;
-            left: 100px;
-            width: calc(100% - 100px);
-            height: 100%;
-            background-color: #fff;
-            border-left: 1px solid #ccc;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .workout-button {
-            width: 25%;
-            height: 25%;
-            border: 1px solid #ccc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 20px;
-            cursor: pointer;
-            margin: 10px;
-        }
-        .profile-buttons {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #fff;
-            border: 1px solid #ccc;
-            padding: 20px;
-        }
-        .profile-button {
-            padding: 10px;
-            margin: 5px;
-            background-color: #f2f2f2;
-            border: 1px solid #ccc;
-            cursor: pointer;
-            text-align: center;
-            width: 80px;
-        }
-        .profile-button:hover {
-            background-color: #ccc;
-        }
-        .workout-plan {
-            display: none;
-            padding: 20px;
-            border: 1px solid #ccc;
-            margin-top: 20px;
-            background-color: #f9f9f9;
-            width: 80%;
-            text-align: center;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Page</title>
+    <link rel="stylesheet" href="st.css">
+</head>
 </head>
 <body>
-    <div class="taskbar" id="taskbar">
-        <div class="taskbar-button" id="settings-button">Settings</div>
-        <div class="taskbar-button" id="profile-button">Profile</div>
-        <div class="taskbar-button" id="about-button">About</div>
-        <div class="taskbar-button" id="progress-button">Progress</div>
-        <div class="taskbar-button" id="workouts-button">My Workouts</div>
-        <div class="taskbar-button" id="personalization-button">Personalization</div>
-    </div>
     <div class="workout-page" id="workout-page-1">
         <button class="workout-button" id="full-body-workout-button">Full Body Workout</button>
         <button class="workout-button" id="abs-workout-button">Abs Workout</button>
         <button class="workout-button" id="leg-workout-button">Leg Workout</button>
         <button class="workout-button" id="arm-bicep-workout-button">Arm and Bicep Workout</button>
     </div>
-    <div class="profile-buttons" id="profile-buttons">
-        <div class="profile-button" id="login-button">Log In</div>
-        <div class="profile-button" id="signup-button">Sign Up</div>
-    </div>
-    <div class="workout-plan" id="full-body-workout-plan">
-        <h2>Full Body Workout Plan</h2>
-        <p>1. Squats - 3 sets of 15 reps</p>
-        <p>2. Push-ups - 3 sets of 20 reps</p>
-        <p>3. Burpees - 3 sets of 10 reps</p>
-        <p>4. Plank - 3 sets of 1 minute</p>
-    </div>
-    <div class="workout-plan" id="abs-workout-plan">
-        <h2>Abs Workout Plan</h2>
-        <p>1. Crunches - 3 sets of 20 reps</p>
-        <p>2. Leg Raises - 3 sets of 15 reps</p>
-        <p>3. Bicycle Crunches - 3 sets of 20 reps</p>
-        <p>4. Plank - 3 sets of 1 minute</p>
-    </div>
-    <div class="workout-plan" id="leg-workout-plan">
-        <h2>Leg Workout Plan</h2>
-        <p>1. Lunges - 3 sets of 15 reps</p>
-        <p>2. Squats - 3 sets of 20 reps</p>
-        <p>3. Leg Press - 3 sets of 15 reps</p>
-        <p>4. Calf Raises - 3 sets of 20 reps</p>
-    </div>
-    <div class="workout-plan" id="arm-bicep-workout-plan">
-        <h2>Arm and Bicep Workout Plan</h2>
-        <p>1. Bicep Curls - 3 sets of 15 reps</p>
-        <p>2. Tricep Dips - 3 sets of 15 reps</p>
-        <p>3. Push-ups - 3 sets of 20 reps</p>
-        <p>4. Shoulder Press - 3 sets of 15 reps</p>
-    </div>
+
     <script>
-        function hideAllSections() {
-            document.getElementById('workout-page-1').style.display = 'none';
-            document.getElementById('profile-buttons').style.display = 'none';
-            hideAllWorkoutPlans();
-        }
-
-        function hideAllWorkoutPlans() {
-            document.querySelectorAll('.workout-plan').forEach(function(plan) {
-                plan.style.display = 'none';
-            });
-        }
-
-        document.getElementById('settings-button').addEventListener('click', function() {
-            fetch('/settings', { method: 'POST' });
-            hideAllSections();
-        });
-
-        document.getElementById('profile-button').addEventListener('click', function() {
-            fetch('/profile', { method: 'POST' });
-            hideAllSections();
-            document.getElementById('profile-buttons').style.display = 'flex';
-        });
-
-        document.getElementById('about-button').addEventListener('click', function() {
-            fetch('/about', { method: 'POST' });
-            hideAllSections();
-        });
-
-        document.getElementById('progress-button').addEventListener('click', function() {
-            fetch('/progress', { method: 'POST' });
-            hideAllSections();
-        });
-
-        document.getElementById('workouts-button').addEventListener('click', function() {
-            hideAllSections();
-            document.getElementById('workout-page-1').style.display = 'flex';
-        });
-
-        document.getElementById('personalization-button').addEventListener('click', function() {
-            fetch('/personalization', { method: 'POST' });
-            hideAllSections();
-        });
-
         document.getElementById('full-body-workout-button').addEventListener('click', function() {
-            hideAllWorkoutPlans();
-            document.getElementById('full-body-workout-plan').style.display = 'block';
+            window.location.href = 'full-body-workout.html';
         });
 
         document.getElementById('abs-workout-button').addEventListener('click', function() {
-            hideAllWorkoutPlans();
-            document.getElementById('abs-workout-plan').style.display = 'block';
+            window.location.href = 'abs-workout.html';
         });
 
         document.getElementById('leg-workout-button').addEventListener('click', function() {
-            hideAllWorkoutPlans();
-            document.getElementById('leg-workout-plan').style.display = 'block';
+            window.location.href = 'leg-workout.html';
         });
 
         document.getElementById('arm-bicep-workout-button').addEventListener('click', function() {
-            hideAllWorkoutPlans();
-            document.getElementById('arm-bicep-workout-plan').style.display = 'block';
-        });
-
-        document.getElementById('login-button').addEventListener('click', function() {
-            const email = prompt("Enter your email:");
-            const password = prompt("Enter your password:");
-
-            fetch('/submit_form', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    action: 'login',
-                    email: email,
-                    password: password
-                }),
-            })
-           .then(response => response.json())
-           .then(data => {
-                if (data.message === 'Log in successful!') {
-                    alert('Logged in successfully!');
-                } else {
-                    alert(data.message);
-                }
-            })
-           .catch(error => {
-                console.error('Error:', error);
-            });
-        });
-
-        document.getElementById('signup-button').addEventListener('click', function() {
-            const name = prompt("Enter your name:");
-            const email = prompt("Enter your email:");
-            const password = prompt("Enter your password:");
-
-            fetch('/submit_form', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    action: 'signup',
-                    name: name,
-                    email: email,
-                    password: password
-                }),
-            })
-           .then(response => response.json())
-           .then(data => {
-                if (data.message === 'Sign-up successful!'){
-                    alert('Signed up successfully!');
-                } else {
-                    alert(data.message);
-                }
-            })
-           .catch(error => {
-                console.error('Error:', error);
-            });
+            window.location.href = 'arm-bicep-workout.html';
         });
     </script>
 </body>
