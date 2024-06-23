@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <style>
+        .taskbar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100px;
+            height: 100%;
+            background-color: #f2f2f2;
+            border-right: 1px solid #ccc;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .taskbar-button {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            text-align: center;
+        }
+        .taskbar-button:hover {
+            background-color: #ccc;
+        }
+        .bmi-calculator {
+            display: none;
+            position: absolute;
+            top: 50px;
+            left: 150px;
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        #bmi-button {
+            display: none;
+            position: absolute;
+            top: 50px;
+            left: 150px;
+            padding: 20px 40px; /* increased padding to make the button bigger */
+            font-size: 18px; /* increased font size to make the button bigger */
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #bmi-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="taskbar" id="taskbar">
+        <div class="taskbar-button" id="settings-button">Settings</div>
+        <div class="taskbar-button" id="profile-button">Profile</div>
+        <div class="taskbar-button" id="about-button">About</div>
+        <div class="taskbar-button" id="progress-button">Progress</div>
+        <div class="taskbar-button" id="workouts-button">My Workouts</div>
+        <div class="taskbar-button" id="personalization-button">Personalization</div>
+    </div>
+    <button id="bmi-button">BMI Calculator</button>
+    <div class="bmi-calculator" id="bmi-calculator">
+        <button id="back-button">Back</button>
+        <h2>BMI Calculator</h2>
+        <label for="height">Height (cm):</label>
+        <input type="number" id="height" placeholder="Height in cm"><br>
+        <label for="weight">Weight (kg):</label>
+        <input type="number" id="weight" placeholder="Weight in kg"><br>
+        <button id="calculate-button">Calculate BMI</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('progress-button').addEventListener('click', function() {
+            document.getElementById('bmi-button').style.display = 'block';
+        });
+
+        document.getElementById('bmi-button').addEventListener('click', function() {
+            document.getElementById('bmi-button').style.display = 'none';
+            document.getElementById('bmi-calculator').style.display = 'block';
+        });
+
+        document.getElementById('back-button').addEventListener('click', function() {
+            document.getElementById('bmi-calculator').style.display = 'none';
+            document.getElementById('bmi-button').style.display = 'block';
+        });
+
+        document.getElementById('calculate-button').addEventListener('click', function() {
+            var height = parseFloat(document.getElementById('height').value);
+            var weight = parseFloat(document.getElementById('weight').value);
+            var bmi = weight / Math.pow(height / 100, 2);
+            document.getElementById('result').innerHTML = 'Your BMI is: ' + bmi.toFixed(2);
+        });
+    </script>
+</body>
+</html>
